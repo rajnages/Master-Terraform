@@ -18,13 +18,13 @@ resource "aws_internet_gateway" "terraform-IGW" {
 # cidr_block: Defines the IP range for this subnet using a variable
 # map_public_ip_on_launch: When true, instances launched in this subnet will get public IPs by default
 resource "aws_subnet" "public-subnet" {
-    count = length(var.public_subnet_cidrs)
-    vpc_id = aws_vpc.terraform-vpc.id
-    cidr_block = var.public_subnet_cidrs[count.index]
-    availability_zone = var.availability_zones[count.index]
-    map_public_ip_on_launch = true
+  count                   = length(var.public_subnet_cidrs)
+  vpc_id                  = aws_vpc.terraform-vpc.id
+  cidr_block              = var.public_subnet_cidrs[count.index]
+  availability_zone       = var.availability_zones[count.index]
+  map_public_ip_on_launch = true
 
-    tags = merge(local.public_subnet_tags, {
+  tags = merge(local.public_subnet_tags, {
     Name = "${local.vpc_name}-public-${var.availability_zones[count.index]}"
   })
 }
@@ -78,4 +78,38 @@ resource "aws_route_table_association" "private" {
   count          = length(var.private_subnet_cidrs)
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private.id
+}
+
+# SECURITY CONCERNS:
+# 1. The security group allows all inbound traffic (0.0.0.0/0) on all ports (from_port=0, to_port=0, protocol=-1)
+# 2. SSH access is allowed from any IP (0.0.0.0/0) which is not recommended for production
+# 3. All outbound traffic is allowed to any destination which may be overly permissive
+resource "aws_security_group" "allow_ssh" {
+  name        = "allow_ssh"
+  description = "Allow SSH traffic"
+  vpc_id      = aws_vpc.terraform-vpc.id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge(local.common_tags, {
+    Name = "${local.vpc_name}-allow-ssh-sg"
+  })
 }

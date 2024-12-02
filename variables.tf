@@ -44,3 +44,19 @@ variable "availability_zones" {
   type = list(string)
   default = [ "us-east-1a", "us-east-1b", "us-east-1c" ]
 }
+
+variable "ami_id" {
+  description = "This is ami id"
+  type = string
+}
+
+variable "instance_type" {
+  description = "This is instance_type"
+  type = string
+}
+
+variable "key_name" {
+  description = "This is key_name"
+  type = string
+}
+variable "instance_count" {}
