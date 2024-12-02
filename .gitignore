@@ -5,3 +5,8 @@
 *.tfstate.backup
 *.log
 terraform.tfstate
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
