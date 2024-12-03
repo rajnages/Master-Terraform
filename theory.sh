@@ -106,3 +106,63 @@ terraform apply
 # Clear logging
 env:TF_LOG=""
 env:TF_LOG_PATH=""
+
+================================================================================================
+
+What is Terraform Backend?
+Terraform Backend is a configuration option in Terraform that allows you to store and manage the state of your infrastructure in a remote or local location. The backend is responsible for storing the state file and providing an interface for reading and writing state data. When you run Terraform, it checks the backend to see if there are any changes to the state file, and if there are, it applies those changes to your infrastructure
+
+Types of Terraform Backends
+1. Local Backend
+A local backend stores the state file on the machine where Terraform is running.
+This is the default backend that is used if you don’t specify a backend in your Terraform configuration
+
+2.Remote Backend
+A remote backend stores the state file in a centralized location, such as a cloud object storage service or a database. Remote backends provide several benefits, such as enabling collaboration between team members, versioning state files, and providing a history of changes. There are several remote backend providers available, such as Amazon S3, Azure Storage, Google Cloud Storage, and HashiCorp Consul.
+
+Why Use dynamodb_table for State Locking?
+1. Prevent Concurrent Modifications
+   Terraform operations like plan or apply modify the state file.
+   Without locking, two users running Terraform simultaneously could corrupt the state or cause unintended changes.
+=> Example Problem Without Locking:
+User A runs terraform apply to create an EC2 instance.
+User B simultaneously runs terraform apply to modify a security group.
+The state file might end up in an inconsistent state, leading to infrastructure drift or errors.
+
+=> How DynamoDB Solves It:
+When a user executes Terraform, a lock is created in the DynamoDB table.
+Other users or processes attempting to run Terraform operations must wait until the lock is released.
+
+=====================================================================================================
+
+=> Terraform Lifecycle
+   In Terraform, the lifecycle block is used to manage specific behaviors of a resource during creation, update, and deletion. It allows you to control how Terraform handles changes and interacts with resources, providing flexibility and safety in resource management.
+
+=> Components of lifecycle
+The lifecycle block supports the following arguments:
+1. create_before_destroy:
+   Ensures that a new resource is created before the old one is destroyed.
+   Commonly used when downtime is unacceptable (e.g., database replacement, critical infrastructure).
+
+2. prevent_destroy
+   Protects resources from accidental deletion by preventing Terraform from destroying them.
+   Useful for critical resources like production databases, S3 buckets, or load balancers.
+
+3. ignore_changes
+  Tells Terraform to ignore certain attributes during an update.
+  Commonly used for fields managed outside of Terraform (e.g., manually updated tags or automatically generated metadata).
+
+===========================================================================================================
+
+=> What is a Provisioner in Terraform?
+   In Terraform, provisioners are used to execute scripts or commands on a resource after it has been created or modified. They act as a bridge between Terraform's infrastructure-as-code capabilities and configuration management or manual steps that need to be performed on resources.
+
+=> Types of Provisioners
+1. remote-exec:
+Executes commands on the remote resource (e.g., an EC2 instance) via SSH or WinRM.
+
+2. local-exec:
+Executes commands on the machine running Terraform.
+
+3. Third-Party Provisioners:
+Terraform supports custom provisioners from plugins for specific use cases.

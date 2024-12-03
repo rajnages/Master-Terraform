@@ -13,7 +13,7 @@ locals {
     Type = "VPC"
   })
 
-  igw_tags = merge (local.common_tags, {
+  igw_tags = merge(local.common_tags, {
     Name = "Public"
     Type = "Internet Gateway"
   })
@@ -26,5 +26,10 @@ locals {
   private_subnet_tags = merge(local.common_tags, {
     Tier = "Private"
     Type = "Subnet"
+  })
+
+  rds_tags = merge(local.common_tags, {
+    Name = "RDS"
+    Type = "Subnet Group"
   })
 }

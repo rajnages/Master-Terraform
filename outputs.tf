@@ -5,5 +5,5 @@ output "vpc_id" {
 
 output "igw_id" {
   description = "The ID of the IGW"
-  value = aws_internet_gateway.terraform-IGW.id
+  value       = aws_internet_gateway.terraform-IGW.id
 }

@@ -41,22 +41,27 @@ variable "private_subnet_cidrs" {
 
 variable "availability_zones" {
   description = "Availability zones for the subnets"
-  type = list(string)
-  default = [ "us-east-1a", "us-east-1b", "us-east-1c" ]
+  type        = list(string)
+  default     = ["us-east-1a", "us-east-1b", "us-east-1c"]
 }
 
-variable "ami_id" {
-  description = "This is ami id"
-  type = string
-}
+# variable "ami_id" {
+#   description = "This is ami id"
+#   type = string
+# }
 
 variable "instance_type" {
   description = "This is instance_type"
-  type = string
+  type        = string
 }
 
 variable "key_name" {
   description = "This is key_name"
-  type = string
+  type        = string
 }
 variable "instance_count" {}
+variable "db_name" {}
+variable "db_storage" {}
+variable "db_instance_class" {}
+variable "db_username" {}
+variable "db_max_storage" {}
