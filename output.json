@@ -1,0 +1,12 @@
+{
+  "igw_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "igw-05120ef90ab157e3e"
+  },
+  "vpc_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "vpc-09b4c773bfea8372f"
+  }
+}

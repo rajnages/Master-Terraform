@@ -166,3 +166,19 @@ Executes commands on the machine running Terraform.
 
 3. Third-Party Provisioners:
 Terraform supports custom provisioners from plugins for specific use cases.
+
+=========================================================================================================
+
+1. Workspace: A workspace is a way to manage different environments (like dev, staging, prod) with separate state files. Each workspace holds its own state, so changes in one workspace don't affect others.
+
+2. Module: A module is a reusable set of Terraform configuration files that define parts of your infrastructure (like networks or instances). You can reuse modules across different parts of your configuration or in different projects.
+
+=> Commands to create and switch workspaces:
+1. Create a new workspace:
+terraform workspace new dev
+terraform workspace new staging
+terraform workspace new prod
+2. Switch to an existing workspace:
+terraform workspace select dev
+terraform workspace select staging
+terraform workspace select prod
